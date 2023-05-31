@@ -1,0 +1,37 @@
+
+
+<div class="logo" style="font-size: 18px;
+font-weight: 600;">
+    <a [routerLink]="['/admin/dashboard']" href="" class="simple-text">
+        <img style="width: 65%;" src="/assets/img/projecthub.png"/>
+    </a>
+    <div>
+  
+        <div id="Profile" style="    margin-top: -6%;" (click)="profile()"><img style="width: 18%;
+            border-radius: 50%;margin-left: 14%;" [src]="imageToShow" onerror="this.onerror=null;this.src='/assets/img/admin.png'" ></div>
+       &nbsp;&nbsp;<div style="margin-left: 100px;
+       
+        margin-top: -59px">{{userName}}</div></div>
+</div>
+<div class="sidebar-wrapper">
+ 
+        
+    <ul class="nav">
+
+
+        <!-- <li  routerLinkActive="{{menuItem.class}}" *ngFor="let menuItem of menuItems"  class="  ">
+            <a data-toggle="collapse" class="nav-link collapsed" [routerLink]="[menuItem.path]">
+                <i class="material-icons">{{menuItem.icon}}</i>
+                <p>{{menuItem.title}}</p>
+            </a>
+        </li>
+       -->
+       <ng-material-multilevel-menu [configuration]='config'  [items]='ROUTES1' (selectedItem)="1">
+    </ng-material-multilevel-menu>
+       
+       
+    </ul>
+
+   
+</div>
+

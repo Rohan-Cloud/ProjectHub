@@ -1,0 +1,58 @@
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card card-chart">
+                    <div class="card-header card-header-B2C" style="font-size: x-large;
+                    font-weight: 500;">
+                           <fusioncharts
+                           [chartConfig]=chartConfig
+                           [dataSource]=dataSource >
+                           </fusioncharts>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Buisness From Client Report</h4>
+                        <p class="card-category">All B2C records</p>
+                    </div>
+                    <div class="card-footer" >
+                        <div class="stats" style="margin-left: 32%;">
+                           <a [routerLink]="['/admin/BuisnessFromClient']" style=" cursor: pointer;
+                            font-size: large;"> More Details </a> <span class="material-icons">
+                                arrow_forward
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-chart">
+                    <div class="card-header card-header-totalinvoice" style="font-size: x-large;
+                    font-weight: 500;">
+                           Total Amount :&nbsp; {{amount}} &nbsp;$
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Total Invoicing Report</h4>
+                        <p class="card-category">All invoicing records</p>
+                    </div>
+                    <div class="card-footer" >
+                        <div class="stats" style="margin-left: 32%;">
+                           <a [routerLink]="['/admin/TotalInvoiceReport']" style=" cursor: pointer;
+                            font-size: large;">More Details </a> <span class="material-icons">
+                                arrow_forward
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+  
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+export class Project
+{
+    projectName:string;
+    client:number;
+    clientName:string;
+    projectShortName:string;
+    description:string;
+    projectType:number;
+    status:number;
+    statusName:string;
+    projectTypeName:string
+    projectCreateddate:string;
+    projectStartDate:string;
+    currency:number;
+    currencyName:string;
+    projectValue:number;
+    projectClosureDate:string;
+    isinternalproject:number;
+    projectRemarks:string;
+    billingHours:number;
+    changeRequest:number;
+    projectManager:number;
+    projectManagerName:string;
+    accountManager:number;
+    accountManagerName:string;
+    servicedBy:number;
+    contractDetails:string;
+    signedContract:number;
+    companyId:number
+    Contractdate:string
+    UploadContract :string
+    createdDate:string;
+    createdBy:number;
+    createPersonName:string;
+    modifiedDate:string;
+    modifiedBy:number;
+    modifiedPersonName:string;
+    adminEmail:string;
+    adminName:string
+} 
+
+export class Searchproject{
+     keyword:string;
+     companyId:number
+     Client:number=0;
+     projectType:number=0;
+     projectManager:number=0;
+     columnName:string;
+     order:string;
+     pageSize:number;
+     page:number;
+}

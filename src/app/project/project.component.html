@@ -1,0 +1,427 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-project">
+            <h4 class="card-title">{{projectHeader}}</h4>
+
+          </div>
+          <ngx-spinner></ngx-spinner>
+          <div class="card-body">
+            <form [formGroup]="projectForm" >
+             
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="ProjectName"
+                      matInput
+                      placeholder="Name"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectName.errors
+                      }"
+                    />
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectName.errors &&
+                        f.ProjectName.errors.required
+                      "
+                      >Project name is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                  <mat-select
+                    [formControl]="clientNameCtrl"
+
+                    placeholder="Client Name"
+                    #singleSelect
+                  >
+                    <mat-select-search
+                      [formControl]="clientNameFilterCtrl"
+                    ></mat-select-search>
+                    <mat-option
+                      *ngFor="let cName of filteredClientName | async"
+                      [value]="cName.id"
+                    >
+                      {{ cName.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                </div>
+              </div>
+               
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="Description"
+                      matInput
+                      placeholder="Description"
+                      type="text"
+
+                    />
+
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="ProjectShortName"
+                      matInput
+                      placeholder=" Short Name"
+                      type="text"
+
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectShortName.errors
+                      }"
+                    />
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectShortName.errors &&
+                        f.ProjectShortName.errors.required
+                      "
+                      >Project short name is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  
+                  <mat-form-field>
+                    <input matInput [formControl]="ProjectCreatedDate"  [matDatepicker]="picker3" placeholder="Created Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+
+                  </mat-form-field>
+
+                </div>
+                <div class="col-md-4">
+                
+                  <mat-form-field>
+                    <input matInput [formControl]="ProjectStartDate" [matDatepicker]="picker2" placeholder="Start Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+
+                  </mat-form-field>
+
+                </div>
+                <div class="col-md-4">
+                 
+                  <mat-form-field>
+                    <input matInput [formControl]="ProjectClosureDate"  [matDatepicker]="picker1" placeholder="Completion Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width">
+                    <mat-label> Type</mat-label>
+                    <mat-select
+                      formControlName="ProjectType"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectType.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let ptype of projectType"
+                        [value]="ptype.id"
+                      >
+                        {{ ptype.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectType.errors &&
+                        f.ProjectType.errors.required
+                      "
+                      >Project type is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Is Internal ?</mat-label>
+                    <mat-select
+                      formControlName="IsInternalProject"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.IsInternalProject.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let inproject of internalProject"
+                        [value]="inproject.id"
+                      >
+                        {{ inproject.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.IsInternalProject.errors &&
+                        f.IsInternalProject.errors.required
+                      "
+                      >Is internal project is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Currency  </mat-label>
+                    <mat-select
+                      formControlName="CurrencyId"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.CurrencyId.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let CName of CurrencyName"
+                        [value]="CName.id"
+                      >
+                        {{ CName.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.CurrencyId.errors &&
+                        f.CurrencyId.errors.required
+                      "
+                      >Currency Name is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="ProjectValue"
+                      matInput
+                      placeholder=" Amount"
+                      type="text"
+                      (keypress)="number()"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectValue.errors
+                      }"
+                    />
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectValue.errors &&
+                        f.ProjectValue.errors.required
+                      "
+                      >Project value is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="ProjectRemark"
+                      matInput
+                      placeholder="Remark"
+                      type="text"
+
+                    />
+
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Account Manager</mat-label>
+                    <mat-select
+                      formControlName="AccountManager"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.AccountManager.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let amanager of accountManagerName"
+                        [value]="amanager.id"
+                      >
+                        {{ amanager.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.AccountManager.errors &&
+                        f.AccountManager.errors.required
+                      "
+                      >Account manager is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Project Manager</mat-label>
+                    <mat-select
+                      formControlName="ProjectManager"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectManager.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let pmanager of projectManagerName"
+                        [value]="pmanager.id"
+                      >
+                        {{ pmanager.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectManager.errors &&
+                        f.ProjectManager.errors.required
+                      "
+                      >Project manager is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      formControlName="BillingHours"
+                      matInput
+                      placeholder="Billing Hours"
+                      type="text"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.BillingHours.errors
+                      }"
+                    />
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.BillingHours.errors &&
+                        f.BillingHours.errors.required
+                      "
+                      >Billing hours is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label> Status</mat-label>
+                    <mat-select
+                      formControlName="Status"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.Status.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let sName of StatusName"
+                        [value]="sName.id"
+                      >
+                        {{ sName.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.Status.errors &&
+                        f.Status.errors.required
+                      "
+                      >Status is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Signed Contract ?</mat-label>
+                    <mat-select
+                      formControlName="signedContract"
+                      (selectionChange)="ChangeContract()"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.signedContract.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let inproject of internalProject"
+                        [value]="inproject.id"
+                      >
+                        {{ inproject.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.signedContract.errors &&
+                        f.signedContract.errors.required
+                      "
+                      >Signed Contract is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div  id="contract"  class="col-md-2">
+                  <mat-form-field>
+                    <input matInput [formControl]="ContractDate" [matDatepicker]="picker4" placeholder="Contract Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                  </mat-form-field>
+
+                </div>
+                <div  id="contract1" class="col-md-3">
+                  <label for="img">Contract File(word/pdf)</label>
+                  <input #file type="file"  name="img"  placeholder="Choose file" multiple (change)="upload(file.files)" />
+                </div>
+                <div  id="contract2" class="col-md-2">
+                  <button
+                  mat-button
+                  (click)="DownLoadFiles()"
+                  class="btn btn-info btn-just-icon"
+                  matTooltip="Download File"
+                >
+                  <i class="material-icons">picture_as_pdf</i>
+                  <div class="ripple-container"></div>
+                </button>
+                  
+
+                </div>
+              </div>
+
+
+
+              <button
+                mat-raised-button
+                type="submit"
+                class="btn btn-success pull-lef"
+              (click)=onSubmit()
+              >
+                Save
+              </button>
+              <button
+                mat-button
+                mat-dialog-close
+                class="btn pull-lef"
+                color="secondary"
+              >
+                Cancel
+              </button>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

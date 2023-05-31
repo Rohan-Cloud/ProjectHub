@@ -1,0 +1,188 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <button
+            mat-raised-button
+            class="pull-right btn-success"
+            (click)="onCreate()"
+          >
+            <mat-icon>add</mat-icon>
+            Add Client
+          </button>
+        </div>
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-client">
+              <h4 class="card-title ">Clients</h4>
+            </div>
+            <div class="card-body">
+              <form [formGroup]="clientForm">
+                <div class="row">
+                  <div class="col-md-5">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        (keyup)="searchTerm$.next(searchClients())"
+                        type="text"
+                        autocomplete="off"
+                        [formControl]="keyword"
+                        matInput
+                        placeholder=" Search Keywords "
+                      />
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-md-3">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>From Date</mat-label>
+                        <input matInput [matDatepicker]="picker" [formControl]="FromDate" 
+                        (dateInput)=" searchTerm$.next(searchClients())">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>                                  
+                    </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>To Date</mat-label>
+                        <input matInput [matDatepicker]="picker1"  [formControl]="ToDate" 
+                        (dateInput)="searchTerm$.next(searchClients())">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    </div> 
+                    
+                  <div class="col-md-1">
+                    <button mat-flat-button class="btn  pull-right" color="secondary" (click)="reset()">
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div class="table-responsive" style="    overflow-x: visible;">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR'||  RoleName === 'Super Admin' ">
+                    <th colspan="2">
+                      Action
+                    </th>
+                    </ng-template>
+                    <th (click)="sort('Name')">
+                      Name <i class="{{nameCSS}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('CompanyName')">
+                      Company Name <i class="{{companyNameCSS}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('EmailId')">
+                      Email ID <i class="{{emailIdCSS}}" aria-hidden="true"></i>
+                    </th>
+                    <!-- <th (click)="sort('AlternateEmailId')">
+                      Alternate EmailID <i class="{{alternateEmailIdCSS}}" aria-hidden="true"></i>
+                    </th > -->
+                    <th (click)="sort('ContactNo1')">
+                      Contact No 1 <i class="{{contactNo1CSS}}" aria-hidden="true"></i>
+                    </th>
+                    <!-- <th (click)="sort('ContactNo2')">
+                      Contact No 2  <i class="{{contactNo2CSS}}" aria-hidden="true"></i>
+                    </th> -->
+                    <!-- <th (click)="sort('Address')">
+                      Address <i class="{{addressCSS}}" aria-hidden="true"></i>
+                    </th> -->
+                    <th (click)="sort('StartDate')">
+                      Start Date <i class="{{startDateCSS}}" aria-hidden="true"></i>
+                    </th>
+                  </thead>
+                  <tbody>
+                    <ng-template [ngIf]="clientList != null">
+                    <tr *ngFor="let client of clientList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                      <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR'||  RoleName === 'Super Admin' ">
+                        <td>
+                          <button
+                            mat-raised-button
+                            (click)="updateClient(client.id)"
+                            class="btn btn-success  btn-just-icon"
+                            matTooltip="Edit"
+                            
+                          >
+                            <i class="material-icons">create</i>
+                            <div class="ripple-container"></div>
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            mat-button
+                            class="btn  btn-just-icon"
+                            color="secondary"
+                            mwlConfirmationPopover
+                            [popoverTitle]="popoverTitle"
+                            [popoverMessage]="popoverMessage"
+                            placement="right"
+                            (confirm)="deleteClient(client.id)"
+                            (cancel)="cancelClicked = true"
+                          >
+                            <i class="material-icons">delete</i>
+                            <div class="ripple-container"></div>
+                          </button>
+                        </td>
+                      </ng-template>
+                      <td>
+                        {{ client.name }}
+                      </td>
+                      <td>
+                        {{ client.companyName }}
+                      </td>
+                      <td>
+                        {{ client.emailId }}
+                      </td>
+                      <!-- <td>
+                        {{ client.alternateEmailId }}
+                      </td> -->
+                      <td>
+                        {{ client.contactNo1 }}
+                      </td>
+                      <!-- <td>
+                        {{ client.contactNo2 }}
+                      </td> -->
+                      <!-- <td>
+                        {{ client.address }}
+                      </td> -->
+                      <td>
+                        {{ client.startDate | date: "MM-dd-yyyy" }}
+                      </td>
+                    </tr>
+                    </ng-template>
+                    <ng-template [ngIf]="clientList == null">
+                      <tr>
+                        <td colspan="7" style="text-align-last: center;font: message-box;">
+                         {{status}}
+                         
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+                <div  class="row">                 
+                  <div class="col-md-7"style="
+                  margin-left: 32%;
+                  width: -37%;">           
+                    <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                  </div>
+  
+                  <div class="col-md-1">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Page size</mat-label>
+                      <mat-select [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                        <mat-option value="5">5</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="25">25</mat-option>
+                        <mat-option value="100">100</mat-option>
+                       </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

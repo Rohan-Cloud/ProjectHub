@@ -1,0 +1,240 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <button
+          mat-raised-button
+          class="pull-right btn btn-success"
+          (click)="onCreate()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Project
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-project">
+            <h4 class="card-title ">Projects</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col-md-5">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      (keyup)="searchTerm$.next(searchProjects())"
+                      type="text"
+                      autocomplete="off"
+                      [formControl]="keyword"
+                      matInput
+                      placeholder=" Search Keywords "
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="clientNameCtrl"
+                      (selectionChange)="searchTerm$.next(searchProjects())"
+                      placeholder="Client Name"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="clientNameFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option
+                        *ngFor="let cName of filteredClientName | async"
+                        [value]="cName.id"
+                      >
+                        {{ cName.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>  
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="projectTypeCtrl"
+                      (selectionChange)="searchTerm$.next(searchProjects())"
+                      placeholder="Project Type"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="projectTypeFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option
+                        *ngFor="let ptype of filteredProjectTypes | async"
+                        [value]="ptype.id"
+                      >
+                        {{ ptype.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>  
+                </div>              
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="projectManagerCtrl"
+                      (selectionChange)="searchTerm$.next(searchProjects())"
+                      placeholder="Project Manager"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="projectManagerFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option
+                        *ngFor="let pmanager of filteredProjectManagers | async"
+                        [value]="pmanager.id"
+                      >
+                        {{ pmanager.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>    
+                     
+                <div class="col-md-1">
+                  <button mat-flat-button class="btn  pull-lef" color="secondary" (click)="reset()">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="table-responsive" style="overflow-x: visible;">
+              <table class="table">
+                <thead class=" text-primary">
+                  <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                  <th colspan="2">
+                    Action
+                  </th>
+                </ng-template>
+                  <th (click)="sort('ProjectName')" class="project-name">
+                    Name <i class="{{projectNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('ClientName')">
+                    Client <i class="{{clientNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('ProjectType')">
+                    Type <i class="{{projectTypeCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('projectStartDate')">
+                    Start Date <i class="{{startDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('projectClosureDate')">
+                    CloserDate <i class="{{closerDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('Isinternalproject')">
+                    Is Internal Project <i class="{{isinternalprojectCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('BillingHours')">
+                    Billing Hours <i class="{{billingHoursCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('projectManagerName')">
+                    Project Manager <i class="{{projectManagerCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('ModifiedBy')">
+                    Modified / By <i class="{{modifiedByCSS}}" aria-hidden="true"></i>
+                  </th>
+
+                </thead>
+                <tbody>
+                  <ng-template [ngIf]="projectList != null">
+                  <tr *ngFor="let project of projectList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                    <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin'">
+                    <td>
+                      <button
+                        mat-raised-button
+                        (click)="updateProject(project.id)"
+                        class="btn btn-success  btn-just-icon"
+                        matTooltip="Edit"
+                      >
+                        <i class="material-icons">create</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        mat-button
+                        class="btn btn-just-icon"
+                        color="secondary" 
+                        mwlConfirmationPopover
+                        [popoverTitle]="popoverTitle"
+                        [popoverMessage]="popoverMessage"
+                        placement="right"
+                        (confirm)="deleteProject(project.id)"
+                        (cancel)="cancelClicked = true"
+                      >
+                        <i class="material-icons">delete</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+                    </ng-template>
+                    <td>
+                      {{ project.projectName }}
+                    </td>
+                    <td>
+                      {{ project.clientName }}
+                    </td>
+                    <td>
+                      {{ project.projectTypeName }}
+                    </td>
+                    <td>
+                      {{ project.projectStartDate | date: "MM-dd-yyyy" }}
+                    </td>
+                    <td>
+                      {{ project.projectClosureDate | date: "MM-dd-yyyy" }}
+                    </td>
+                    <td>
+                      {{ project.isInternalproject == 1 ? "Yes" : "No" }}
+                    </td>
+                    <td>
+                      {{ project.billingHours }}
+                    </td>
+
+                    <td>
+                      {{ project.projectManagerName }}
+                    </td>
+
+                    <td>
+                      {{ project.modifiedDate | date: "MM-dd-yyyy" }} <br>
+                      {{ project.modifiedPersonName }}
+                    </td>
+                  </tr>
+                  </ng-template>
+                  <ng-template [ngIf]="projectList == null">
+                    <tr>
+                      <td colspan="11" style="text-align-last: center;font: message-box;">
+                        {{status}}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+              <div  class="row">
+                 
+                <div class="col-md-7"style="
+                margin-left: 32%;
+                width: -37%;
+            ">           
+                  <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                </div>
+
+                <div class="col-md-1">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Page size</mat-label>
+                    <mat-select  [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="25">25</mat-option>
+                      <mat-option value="100">100</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                </div>
+              </div> 
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

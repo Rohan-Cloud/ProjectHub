@@ -1,0 +1,264 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <button
+            mat-raised-button
+            class="pull-right btn-success"
+            (click)="onCreate()"
+          >
+            <mat-icon>add</mat-icon>
+            Add Milestone
+          </button>
+        </div>
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-milestone">
+              <h4 class="card-title ">Milestones</h4>            
+            </div>
+            <div class="card-body">
+                <form [formGroup]="searchMileStoneForm" autocomplete="off">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <mat-form-field class="example-full-width">
+                          <input
+                            (keyup)="searchTerm$.next(SearchMileStone())"
+                            type="text"
+                            autocomplete="off"
+                            formControlName="Keyword"
+                            matInput
+                            placeholder="Keyword ......"
+                          />
+                          
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-2">
+                        
+                        <mat-form-field>
+                            <mat-select [formControl]="ClientNameCtrl" placeholder="Clients" (selectionChange)=" searchTerm$.next(GetClientProject())" #singleSelect>
+                              <mat-select-search [formControl]="ClientNameFilterCtrl"></mat-select-search>
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let Client of filteredClients | async" [value]="Client.id">
+                                {{Client.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select [formControl]="ProjectNameCtrl" placeholder="Projects" (selectionChange)=" searchTerm$.next(SearchMileStone())" #singleSelect>
+                              <mat-select-search [formControl]="ProjectNameFilterCtrl"></mat-select-search>
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let Project of filteredProjects | async" [value]="Project.id">
+                                {{Project.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="col-md-2">
+                        
+                        <mat-form-field>
+                            <mat-select [formControl]="StatusCtrl" placeholder="Status" (selectionChange)=" searchTerm$.next(SearchMileStone())" #singleSelect>
+                              <mat-select-search [formControl]="StatusFilterCtrl"></mat-select-search>
+                              <mat-option>None</mat-option>
+                              <mat-option *ngFor="let Status of filteredStatus | async" [value]="Status.id">
+                                {{Status.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                     
+                      <div class="col-md-2" >
+                        <mat-form-field>
+                          <input  matInput [formControl]="StartDate"  [matDatepicker]="picker" (dateInput)="searchTerm$.next(SearchMileStone())" placeholder="From  date" >
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker ></mat-datepicker>
+                        
+                        </mat-form-field> 
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <input  matInput [formControl]="Todate"  [matDatepicker]="picker1"  (dateInput)="searchTerm$.next(SearchMileStone())" placeholder="To date">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1 ></mat-datepicker>
+                          </mat-form-field> 
+                          </div>
+                        
+                      <div class="col-md-1" style="margin-left: 92%;">
+                        <button mat-flat-button class="btn pull-none" color="secondary" (click)="reset()" >
+                          Reset
+                        </button>
+                      </div>
+
+
+                    </div>
+                        
+                        
+                     <!-- </div>
+                      <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                          <input
+                            (keyup)="searchTerm$.next(searchProjectAllocation())"
+                            type="text"
+                            autocomplete="off"
+                            formControlName="EmployeeName"
+                            matInput
+                            placeholder="Employee Name"
+                          />
+                        </mat-form-field>
+                      </div> -->
+                    
+                  </form>
+              <div class="table-responsive" style="    overflow-x: visible;">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                    <th colspan="2" style="width: 11.5%;">
+                      Action
+                    </th>
+                  </ng-template>  
+                    <th (click)="sort('Name')">
+                      Name <i class="{{nameCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('ClientName')">
+                        Client <i class="{{clientNameCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('ProjectName')">
+                        Project <i class="{{projectNameCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('Hour')">
+                        Hour <i class="{{hourCss}}" aria-hidden="true"></i>
+                    </th>
+                    
+                    <th (click)="sort('Amount')">
+                        Amount  <i class="{{amountCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('CurrencyName')">
+                        Currency <i class="{{currencyNameCss}}" aria-hidden="true"></i>
+                    </th >
+                   
+                    <th (click)="sort('StartDate')">
+                        StartDate <i class="{{startDateCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('EndDate')">
+                        EndDate <i class="{{endDateCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('Status')">
+                      Status <i class="{{statusCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('ModifiedDate')">
+                        Modified / By <i class="{{modifiedDateCss}}" aria-hidden="true"></i>
+                    </th>
+                   
+                  </thead>
+                  <tbody>
+                    <ng-template [ngIf]="mileStoneList != null">
+                    <tr *ngFor="let milestone of mileStoneList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                      <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                      <td>
+                        <button
+                          mat-raised-button
+                          (click)="updateMileStone(milestone.id)"
+                          class="btn btn-success  btn-just-icon"
+                          matTooltip="Edit"
+                        >
+                          <i class="material-icons">create</i>
+                          <div class="ripple-container"></div>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          mat-button
+                          class="btn  btn-just-icon"
+                          color="secondary"
+                          mwlConfirmationPopover
+                          [popoverTitle]="popoverTitle"
+                          [popoverMessage]="popoverMessage"
+                          placement="right"
+                          (confirm)="deleteMileStone(milestone.id)"
+                          (cancel)="cancelClicked = true"
+                        >
+                          <i class="material-icons">delete</i>
+                          <div class="ripple-container"></div>
+                        </button>
+                      </td>
+                      </ng-template>
+                      <td>
+                        {{ milestone.name }}
+                      </td>
+                      <td>
+                        {{ milestone.clientName }}
+                      </td>
+                      <td>
+                        {{ milestone.projectName }}
+                      </td>
+                     
+                      <td>
+                        {{ milestone.hour }}
+                      </td>
+                     
+                      <td>
+                        {{ milestone.amount }}
+                      </td>
+                      <td>
+                        {{ milestone.currencyName }}
+                      </td>
+                      
+                      <td>
+                        {{ milestone.startDate | date:  "MM-dd-yyyy" }}
+                      </td>
+                      <td>
+                        {{ milestone.endDate | date: "MM-dd-yyyy" }}
+                      </td>
+                      <td>
+                        {{ milestone.statusName }}
+                      </td>
+                      <td>
+                        {{ milestone.modifiedDate | date:  "MM-dd-yyyy" }}<br>
+                        {{ milestone.modifiedBYName }}
+                      </td>
+                    
+                    </tr>
+                    </ng-template>
+                    <ng-template [ngIf]="mileStoneList == null">
+                      <tr>
+                        <td colspan="12" style="text-align-last: center;font: message-box;">
+                          {{status}}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                 
+                </table>
+               
+                <!-- <div ng-app="refresh_div" ng-controller="refresh_control"> -->
+                <div  class="row">
+                 
+                <div class="col-md-7"style="
+                margin-left: 32%;
+                width: -37%;
+            ">           
+                  <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                </div>
+
+                <div class="col-md-1">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Page size</mat-label>
+                    <mat-select  [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="25">25</mat-option>
+                      <mat-option value="100">100</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

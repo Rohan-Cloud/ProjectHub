@@ -1,0 +1,288 @@
+<div class="main-content">
+ 
+  <div class="container-fluid">
+    <ng-template [ngIf]="RoleName == 'Super Admin'">
+        <div class="row" id="SuperAdmin">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+            </div>
+              <div class="col-md-3">
+                <form [formGroup]="DashboardForm" >
+                <mat-form-field>
+                    <mat-label>Company Name</mat-label>
+                    <mat-select
+                      formControlName="Companyname"
+                      (selectionChange)="ChangeCompany()"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.Companyname.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let cname of CompanyName"
+                        [value]="cname.id"
+                      >
+                        {{ cname.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.Companyname.errors &&
+                        f.Companyname.errors.required
+                      "
+                      >Company Name is required</mat-error
+                    >
+                  </mat-form-field>
+                  </form>
+              </div>
+       
+          </div>
+    </ng-template> 
+    
+
+      <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                  <div class="card-header card-header-info card-header-icon">
+                      <div class="card-icon-Employee"  id="Icon">
+                          <i class="material-icons">content_paste</i>
+                      </div>
+                      <p class="card-category" id="card-categoryinline">Total Employee</p>
+                      <h3 class="card-title">{{totalEmployee}}
+                         
+                      </h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons text-danger">content_paste</i>
+                          <a herf="#">Total Employee along with Project</a>
+                          <!-- <a href="javascript:void(0)">Get More Space...</a> -->
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon-Project"  id="Icon">
+                        <i class="material-icons">classe</i>
+                    </div>
+                    <p class="card-category" id="card-categoryinline">Total Project</p>
+                    <h3 class="card-title">{{totalProject}}
+                       
+                    </h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons text-danger">classe</i>
+                        <a herf="#"> Projects In Company</a>
+                        <!-- <a href="javascript:void(0)">Get More Space...</a> -->
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon">
+                      <div class="card-icon-Client"  id="Icon">
+                          <i class="material-icons">face</i>
+                      </div>
+                      <p class="card-category" id="card-categoryinline">Total Client</p>
+                      <h3 class="card-title">{{totalClient}}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons text-danger">face</i> Clients In Company  
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+
+         
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon-Milestone" id="Icon">
+                        <i class="material-icons">assignment_late</i>
+                    </div>
+                     <p class="card-category" id="card-categoryinline">Pending Milestones & Amount </p>
+                    <h3 class="card-title">{{penddingMilestone}}</h3>
+                
+                <div class="card-footer">
+                  <div class="stats">
+                      <table  style="color: black;">
+                          <tr>                            
+                              <td><p class="tag">INR (₹​) :-</p></td> 
+                              <td class="amountTD"><h3 class="tag">{{penddingMilestoneINR}}</h3></td>
+                          </tr>
+                          <tr>
+                              <td><p class="tag">DOLLER ($) :- </p></td>
+                              <td class="amountTD"><h3 class="tag">{{penddingMilestoneDOL}}</h3></td>
+                         </tr>
+                         <tr>
+                              <td><p class="tag">EURO (€) :- </p></td>
+                              <td class="amountTD"><h3 class="tag">{{penddingMilestoneEURO}}</h3></td>
+                         </tr>
+                         <tr>
+                              <td><p class="tag">GBP (£) :- </p></td>
+                              <td class="amountTD"><h3 class="tag">{{penddingMilestoneGBP}}</h3></td>
+                     </tr>
+                      </table>         
+                  </div>
+                </div>
+                </div>
+            </div>
+        </div>   
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-invoice card-header-icon">
+                    <div class="card-icon-invoice"  id="Icon">
+                        <i class="material-icons">table_chart</i>
+                    </div>
+                    <p class="card-category" id="card-categoryinline">Total Invoiced Amount</p>
+                    <!-- <h3 class="card-title">{{penddingMilestone}}</h3> -->
+                   <div class="card-footer">
+                    <div class="stats">
+                        <table  style="color: black;">
+                            <tr>                            
+                                <td><p class="tag">INR (₹​) :-</p></td> 
+                                <td><h3 class="tag">{{invoiceINR}}</h3></td>
+                            </tr>
+                            <tr>
+                                <td><p class="tag">DOLLER ($) :- </p></td>
+                                <td><h3 class="tag">{{invoiceDOL}}</h3></td>
+                           </tr>
+                           <tr>
+                                <td><p class="tag">EURO (€) :- </p></td>
+                                <td><h3 class="tag">{{invoiceEURO}}</h3></td>
+                           </tr>
+                           <tr>
+                                <td><p class="tag">GBP (£) :- </p></td>
+                                <td><h3 class="tag">{{invoiceGBP}}</h3></td>
+                       </tr>
+                        </table>         
+                    </div>
+                </div>
+                </div>           
+            </div>
+        </div> 
+        
+    
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon"  id="Icon">
+                        <i class="material-icons">payment</i>
+                    </div>
+                    <p class="card-category" id="card-categoryinline">Total Collection Recived</p>
+                   <!--  <h3 class="card-title">{{totalInvoiced}}</h3> -->
+                   <div class="card-footer">
+                    <div class="stats">
+                        <table style="color: black;">
+                            <tr>                            
+                                <td><p class="tag">INR (₹​) :-</p></td> 
+                                <td><h3 class="tag">{{collectionReciveINR}}</h3></td>
+                            </tr>
+                            <tr>
+                                <td><p class="tag">DOLLER ($) :- </p></td>
+                                <td><h3 class="tag">{{collectionReciveDOL}}</h3></td>
+                           </tr>
+                           <tr>
+                                <td><p class="tag">EURO (€) :- </p></td>
+                                <td><h3 class="tag">{{collectionReciveEURO}}</h3></td>
+                           </tr>
+                           <tr>
+                                <td><p class="tag">GBP (£) :- </p></td>
+                                <td><h3 class="tag">{{collectionReciveGBP}}</h3></td>
+                       </tr>
+                        </table>         
+                    </div>
+                </div>
+                </div>           
+            </div>
+        </div> 
+    
+        
+      </div>
+      <div class="row">
+          <div class="col-md-2" >
+              <mat-form-field class="example-full-width">
+                  <mat-label>Currency  </mat-label>
+                  <mat-select
+                  [formControl]="CurrencyId"
+                  (selectionChange)="searchTerm$.next(SearchTotalRevenue())"
+                  
+                    [ngClass]="{
+                      'is-invalid': submitted && f.CurrencyId.errors
+                    }"
+                  >
+                
+                    <mat-option
+                      *ngFor="let CName of CurrencyName"
+                      [value]="CName.id"
+                    >
+                      {{ CName.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      submitted &&
+                      f.CurrencyId.errors &&
+                      f.CurrencyId.errors.required
+                    "
+                    >Currency Name is required</mat-error
+                  >
+                </mat-form-field> 
+          </div> 
+          <div class="col-md-2" >
+              <mat-form-field class="example-full-width">
+                  <mat-label>Year Range  </mat-label>
+                  <mat-select
+                  [formControl]="Year"
+                  (selectionChange)="searchTerm$.next(SearchTotalRevenue())"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.CurrencyId.errors
+                    }"
+                  >
+                    <mat-option
+                      *ngFor="let Yrange of year"
+                      [value]="Yrange"
+                    >
+                      {{ Yrange }}
+                    </mat-option>
+                  </mat-select>
+                 
+                </mat-form-field>
+                
+              
+
+              
+              
+
+              
+          </div> 
+          <div class="col-md-1" >
+            <button mat-flat-button class="btn pull-none" color="secondary" (click)="reset()" >
+              Reset
+            </button>
+          </div>
+      </div>
+      
+        <div class="row">
+          
+             <div class="col-lg-4 col-md-4 col-sm-4">
+                <fusioncharts
+                [chartConfig]=chartConfig
+                [dataSource]=dataSource >
+                </fusioncharts>
+            </div>
+          </div> 
+      
+     
+</div>
+</div>

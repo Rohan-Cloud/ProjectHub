@@ -1,0 +1,278 @@
+
+<div class="main-content">
+  <div class="container-fluid">
+   
+    <div class="row">
+      <div class="col-md-12">
+        <button
+          mat-raised-button
+          class="pull-right btn-success"
+          (click)="onCreate()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Employee
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-emp">
+            <h4 class="card-title ">Employees</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                    <input 
+                      (keyup)="searchTerm$.next(searchEmployees())"
+                      type="text"
+                      autocomplete="off"
+                      [formControl]="keyword"
+                      matInput
+                      placeholder=" Search Keywords "
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                  
+                    <mat-select
+                      [formControl]="technologyCtrl"
+                      (selectionChange)="searchTerm$.next(searchEmployees())"
+                      placeholder="Technology"
+                      #singleSelect
+                    >
+                    <mat-select-search
+                    [formControl]="technologyFilterCtrl"
+                  ></mat-select-search>
+                    <mat-option>None</mat-option>
+                      <mat-option
+                        *ngFor="let technology of filteredTechnologys | async"
+                        [value]="technology.id"
+                      >
+                        {{ technology.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="locationCtrl"
+                      (selectionChange)="searchTerm$.next(searchEmployees())"
+                      placeholder="Location"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="locationFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option>None</mat-option>
+                      <mat-option
+                        *ngFor="let location of filteredLocations | async"
+                        [value]="location.id"
+                      >
+                        {{ location.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="statusCtrl"
+                      (selectionChange)="
+                        searchTerm$.next(searchEmployees())
+                      "
+                      placeholder="Status"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="statusFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option>None</mat-option>
+                      <mat-option
+                        *ngFor="let status of filteredStatus | async"
+                        [value]="status.id"
+                      >
+                        {{ status.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="roleCtrl"
+                      (selectionChange)="
+                        searchTerm$.next(searchEmployees())
+                      "
+                      placeholder="Role"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="roleFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option>None</mat-option>
+                      <mat-option
+                        *ngFor="let role of filteredRoles | async"
+                        [value]="role.id"
+                      >
+                        {{ role.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-1">
+                  <button mat-flat-button class="btn  pull-lef" color="secondary" (click)="reset()">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="table-responsive" style="    overflow-x: visible;">
+              <table class="table">
+                <thead class=" text-primary">
+                  <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                  <th colspan="3">
+                    Action
+                  </th>
+                </ng-template>
+                  <th (click)="sort('Name')">
+                    Name <i class="{{nameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('Title')">
+                    Title <i class="{{titleCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('TechnologyName')">
+                    Technology <i class="{{technologyNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('LocationName')">
+                    Location <i class="{{locationNameCSS}}" aria-hidden="true"></i>
+                  </th >
+                  <th (click)="sort('StatusName')">
+                    Status <i class="{{statusNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('reportingAuthorityName')">
+                    Reporting To  <i class="{{reportingAuthorityCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('RoleName')">
+                    Role <i class="{{roleNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('UpdatedDate')">
+                    Updated <i class="{{updatedDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <!-- <th (click)="sort('JoiningDate')">
+                    Updated <i class="{{joiningDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('dateofBirth')">
+                    Updated <i class="{{joiningDateCSS}}" aria-hidden="true"></i>
+                  </th> -->
+                </thead>
+                <tbody>
+                  <ng-template [ngIf]="employeeList != null">
+                  <tr *ngFor="let employee of employeeList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                    <ng-template [ngIf]="RoleName == 'Admin' || RoleName == 'HR' ||  RoleName === 'Super Admin'">
+                    <td>
+                      <button
+                        mat-raised-button
+                        (click)="updateEmployee(employee.id)"
+                        class="btn btn-success  btn-just-icon"
+                        matTooltip="Edit"
+                        
+                      >
+                        <i class="material-icons">create</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+
+                    <td>
+                      <button
+                        mat-button
+                        class="btn  btn-just-icon"
+                        color="secondary"
+                        mwlConfirmationPopover
+                        [popoverTitle]="popoverTitle"
+                        [popoverMessage]="popoverMessage"
+                        placement="right"
+                        (confirm)="deleteEmployee(employee.id)"
+                        (cancel)="cancelClicked = true"
+                      >
+                        <i class="material-icons">delete</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        mat-raised-button
+                        (click)="InsertCredential(employee.id)"
+                        class="btn btn-info btn-just-icon"
+                        matTooltip="Add Credentials"
+                        
+                      >
+                        <i class="material-icons">vpn_key</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+                  </ng-template>
+                    <td>
+                      {{ employee.name }}
+                    </td>
+                    <td>
+                      {{ employee.title }}
+                    </td>
+                    <td>
+                      {{ employee.technologyName }}
+                    </td>
+                    <td>
+                      {{ employee.locationName }}
+                    </td>
+                    <td>
+                      {{ employee.statusName }}
+                    </td>
+                    <td>
+                      {{ employee.reportingAuthorityName }}
+                    </td>
+                    <td>
+                      {{ employee.roleName }}
+                    </td>
+                    <td>
+                      {{ employee.updatedDate | date: "MM-dd-yyyy" }}
+                    </td>
+                  </tr>
+                  </ng-template>
+                  <ng-template [ngIf]="employeeList == null">
+                    <tr>
+                      <td colspan="10" style="text-align-last: center;font: message-box;">
+                        {{status}}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+              <div  class="row">                 
+                <div class="col-md-7"style="
+                margin-left: 32%;
+                width: -37%;">           
+                  <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                </div>
+
+                <div class="col-md-1">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Page size</mat-label>
+                    <mat-select  [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="25">25</mat-option>
+                      <mat-option value="100">100</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

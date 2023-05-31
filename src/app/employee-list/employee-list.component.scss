@@ -1,0 +1,24 @@
+.reportingAuthority
+{
+    width: fit-content;
+}
+th[colspan="2"]
+{
+    text-align: center;
+    cursor: pointer;
+}
+th{
+    cursor: pointer;
+}
+
+.table {
+    width: -webkit-fill-available;
+    margin-bottom: 1rem;
+    color: #212529;
+    overflow-x: scroll;
+}
+.btn-primary{
+    background-color: blue;
+}body {
+    overflow: hidden; /* Hide scrollbars */
+  }

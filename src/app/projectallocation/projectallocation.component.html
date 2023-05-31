@@ -1,0 +1,192 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-projectallocation">
+            <h4 class="card-title">{{projectAllocationHeader}}</h4>
+            <!-- <p class="card-category">Complete Project Allocation Details</p> -->
+          </div>
+          <div class="card-body">
+            <form [formGroup]="projectAllocationForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Project Name</mat-label>
+                    <mat-select
+                      formControlName="ProjectId"
+                      (selectionChange)="ProjectDateRange()"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.ProjectId.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let pname of projectName"
+                        [value]="pname.id"
+                      >
+                        {{ pname.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.ProjectId.errors &&
+                        f.ProjectId.errors.required
+                      "
+                      >Project Name is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Employee Name</mat-label>
+                    <mat-select
+                      formControlName="EmployeeId"
+                      (selectionChange)="GetEmployeeAllocation($event.value)"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.EmployeeId.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let ename of employeeName"
+                        [value]="ename.id"
+                      >
+                        {{ ename.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.EmployeeId.errors &&
+                        f.EmployeeId.errors.required
+                      "
+                      >Employee Name is required</mat-error
+                    >
+                  </mat-form-field>
+                  
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="StartDate"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.StartDate.errors
+                    }">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>                   
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.StartDate.errors &&
+                        f.StartDate.errors.required
+                      "
+                      >Start date is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [min]="minDate" [max]="maxDate" formControlName="EndDate"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.EndDate.errors
+                    }" >
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>                   
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.EndDate.errors &&
+                        f.EndDate.errors.required
+                      "
+                      >End date is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>% Allocated:</mat-label>
+                    <mat-select
+                      formControlName="allocatedCtrl"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.allocatedCtrl.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let allocated of Allocated"
+                        [value]="allocated.value"
+                      >
+                        {{ allocated.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.allocatedCtrl.errors &&
+                        f.allocatedCtrl.errors.required
+                      "
+                      >allocated % is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Is Billable ?</mat-label>
+                    <mat-select
+                      formControlName="IsBillableCtrl"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.IsBillableCtrl.errors
+                      }"
+                    >
+                      <mat-option
+                        *ngFor="let isbillable of isBillable"
+                        [value]="isbillable.id"
+                      >
+                        {{ isbillable.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        submitted &&
+                        f.IsBillableCtrl.errors &&
+                        f.IsBillableCtrl.errors.required
+                      "
+                      >Is Biilable is required</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <button
+                mat-raised-button
+                type="submit"
+                class="btn btn-success pull-lef"
+              >
+                Save
+              </button>
+              <button
+                mat-button
+                mat-dialog-close
+                class="btn  pull-lef"
+                color="secondary" 
+              >
+                Cancel
+              </button>
+              <div id="flag" style="color: red;">
+                <span class="material-icons">
+                outlined_flag
+                </span>
+                {{EmpName}} is totaly {{allocatedPer}}% allocated
+              </div>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,221 @@
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- <div class="container" id="print">
+    <div class="row">
+        <div class="col-xs-12">
+    		<div class="invoice-title">
+    			<h2>Invoice</h2>
+    		</div>
+    		<hr>
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<address>
+    				<strong>Client Detail</strong><br><br>
+    					{{clientname}}<br>
+    					{{clientCompanyName}}<br>
+    					{{clientEmailId}}<br>
+                        {{clientContactNo}}<br>
+                       {{clientAddress}}
+    				</address>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<address>
+        			<strong>Project </strong><br><br>
+    					{{projectName}}<br>
+    					{{projectShortName}}<br>
+    					
+    				</address>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<address>
+    					<strong>Payment Method:</strong><br>
+    					Visa ending **** 4242<br>
+    					jsmith@email.com
+    				</address>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<address>
+    					<strong>Order Date:</strong><br>
+    					March 7, 2014<br><br>
+    				</address>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-12">
+    		<div class="panel panel-default">
+    			<div class="panel-heading">
+    				<h3 class="panel-title"><strong>Order summary</strong></h3>
+    			</div>
+    			<div class="panel-body">
+    				<div class="table-responsive">
+    					<table class="table table-condensed">
+    						<thead>
+                                <tr>
+        							<td><strong>Description</strong></td>
+        							<td class="text-center"></td>
+        							<td class="text-center"><strong>Hour</strong></td>
+        							<td class="text-right"><strong>Totals</strong></td>
+                                </tr>
+    						</thead>
+    						<tbody>
+    							<!-- foreach ($order->lineItems as $line) or some such thing here 
+                                <tr *ngFor="let report of reportList">
+                      
+                                    <td>
+                                     {{ report.name }} 
+                                    
+                                    </td>
+                                    <td class="text-center">
+                                       
+                                       
+                                       </td>
+                                    <td class="text-center"> {{ report.hour }}</td>
+                                     
+                                  
+                                    <td class="text-right">{{ report.currencyName }} {{ report.amount }}</td>
+                                  </tr>
+    							<tr>
+    								<td class="thick-line"></td>
+    								<td class="thick-line"></td>
+    								<td class="thick-line text-center" ><strong>Subtotal</strong></td>
+    								<td class="thick-line text-right" >{{subtotal}}</td>
+    							</tr>
+                                        <!-- <tr>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line text-center"><strong>Shipping</strong></td>
+                                            <td class="no-line text-right">$15</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line text-center"><strong>Total</strong></td>
+                                            <td class="no-line text-right">$685.99</td>
+                                        </tr>
+    						</tbody>
+    					</table>
+                    </div>
+                   
+                </div>
+               
+    		</div>
+    	</div>
+    </div>
+   
+</div>
+<div  class="row">
+    <div class="col-md-12">
+        <button
+          mat-raised-button
+          class="pull-right btn-success"
+          (click)="genratePdf()"
+        >
+          <mat-icon>add</mat-icon>
+         Generate PDF
+        </button>
+      </div>
+    </div>   -->
+
+    <div id="print">
+<html>
+    <div></div>
+	<head>
+		<meta charset="utf-8">
+		<title>Invoice</title>
+	
+	
+	</head>
+	<body style="font-size: large;">
+		<header>
+			<h1>Invoice</h1>
+            <address style="font: -webkit-small-control;">
+             
+                  <h3>{{clientname}}</h3>  
+                    {{clientCompanyName}}<br>
+                    {{clientEmailId}}<br>
+                    {{clientContactNo}}<br>
+                   {{clientAddress}}
+                </address>
+			
+		</header>
+		<article>
+		
+			<address style=" display: flex;
+            margin-top: -3%;">
+                <p style="font-size:large">Project:</p>&nbsp;&nbsp;{{projectName}}
+                
+            </address>
+			<table class="meta" style="margin-top: -21%;">
+				<tr>
+					<th><span >Invoice #</span></th>
+					<td style="text-align: end;" ><span >{{invoiceId}}</span></td>
+				</tr>
+				<tr>
+					<th><span >Date</span></th>
+					<td style="text-align: end;"><span >{{date | date: "MM-dd-yyyy" }}</span></td>
+				</tr>
+				<tr>
+					<th><span >Amount</span></th>
+					<td style="text-align: end;"><span>{{CurruncySign}} &nbsp; {{ subtotal }}</span></td>
+				</tr>
+			</table>
+			<table class="inventory">
+				<thead>
+					<tr>
+						
+						<th style="width: 85%;"><span >Particular</span></th>
+						
+						<th style="width: 19%;"><span  >Amount</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let report of reportList">
+                       
+						<td><span   >{{ report.name }} </span></td>
+                        
+						<td style="text-align: end;"><span>{{CurruncySign}} {{ report.amount }}</span></td>
+                    </tr>
+                 
+				</tbody>
+			</table>
+		
+			<table class="balance">
+				<tr>
+					<th><span   >Total</span></th>
+					<td><span data-prefix> {{CurruncySign}}  </span><span>{{subtotal}}</span></td>
+				</tr>
+				<tr>
+					<th><span   >Amount Paid</span></th>
+					<td><span data-prefix>{{CurruncySign}}  </span><span>{{amountPaid}}</span></td>
+				</tr>
+				<tr>
+					<th><span   >Balance Due</span></th>
+					<td><span data-prefix>{{CurruncySign}}  </span><span>{{balanceDue}}</span></td>
+				</tr>
+			</table>
+		</article>
+		
+	</body>
+</html>
+</div>
+<div  class="row">
+    <div class="col-md-12">
+        <button
+          mat-raised-button
+          class="pull-right btn-success"
+          (click)="genratePdf()"
+        >
+          <mat-icon>add</mat-icon>
+         Generate PDF
+        </button>
+      </div>
+</div>

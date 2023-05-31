@@ -1,0 +1,26 @@
+.tag{
+    font-size: 15px;
+    margin-top: -5px;
+    margin-left: 9px;
+}
+.stats
+{
+    color: black;
+}
+#card-categoryinline{
+    color: #000000;
+    font-size: 17px;
+    margin-left: 32%;
+    font-weight: 600;
+}
+.amountTD
+{
+    text-align: end;
+}
+#Icon{
+    border-radius: 3px;
+    padding: 4px;
+    margin-top: -20px;
+    margin-right: 15px;
+    float: left;
+}

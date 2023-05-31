@@ -1,0 +1,114 @@
+@mixin sidebar-background-color($background-color, $font-color){
+    .nav{
+        .nav-item{
+            .nav-link{
+              color: $font-color;
+            }
+            i{
+              color: rgba($font-color, .8);
+            }
+
+            &.active,
+            &:hover{
+                [data-toggle="collapse"]{
+                  color: $font-color;
+                    i{
+                        color: rgba($font-color, .8);
+                    }
+                }
+            }
+        }
+    }
+    .user{
+        a{
+          color: $font-color;
+        }
+    }
+    .simple-text{
+        color: $font-color;
+    }
+    .sidebar-background:after{
+        background: $background-color;
+        opacity: .8;
+    }
+}
+
+@mixin sidebar-active-color($font-color){
+    .nav{
+      .nav-item{
+            &.active > a:not([data-toggle="collapse"]){
+                color: $font-color;
+                opacity: 1;
+                @include shadow-big-color($font-color);
+
+                i{
+                    color: rgba($font-color, .8);
+                }
+            }
+        }
+    }
+}
+
+@mixin set-background-color-button($color){
+
+    li.active > a{
+        background-color: #3f51b5;
+        @include shadow-big-color(#3f51b5);
+    }
+    
+    li.employee > a{
+        background-color:  #003f5c;
+        color: white;
+        @include shadow-big-color(#003f5c);
+    }
+    li.project > a{
+        background-color:  #2f4b7c;
+        color: white;
+        @include shadow-big-color(#2f4b7c);
+    }
+    li.projectallocation > a{
+        background-color:  #665191;
+        color: white;
+        @include shadow-big-color(#665191);
+    }
+    li.milestone > a{
+        background-color:  #a05195;
+        color: white;
+        @include shadow-big-color(#a05195);
+    }
+    li.client > a{
+        background-color:  #d45087;
+        color: white;
+        @include shadow-big-color(#d45087);
+    }
+    li.invoice > a{
+        background-color:  #f95d6a;
+        color: white;
+        @include shadow-big-color(#f95d6a);
+    }
+    li.B2C > a{
+        background-color:  #ff7c43;
+        color: white;
+        @include shadow-big-color(#ff7c43);
+    }
+    li.projectmodule > a{
+        background-color:  #ba68c8
+        ;
+        color: white;
+        @include shadow-big-color(#ba68c8
+        );
+    }
+    li.totalinvoice > a{
+        background-color:  #ffa600;
+        color: white;
+        @include shadow-big-color(#ffa600);
+    }
+
+
+   
+        // li.activeEmp > a{
+        //     background-color: #5a1717;
+        //     @include shadow-big-color(#0dc706);
+        // }
+   
+}

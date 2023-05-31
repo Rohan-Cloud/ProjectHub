@@ -1,0 +1,174 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-totalinvoice">
+              <h4 class="card-title "> Free Summary Report</h4>            
+            </div>
+            <div class="card-body">
+                <form  autocomplete="off">
+                    <div class="row">
+                      <div class="col-md-2" >
+                        <mat-form-field>
+                          <input  matInput [formControl]="FromDate"  [matDatepicker]="picker" (dateInput)="searchTerm$.next(SearchFreeSummaryReport())" placeholder="From  date" >
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker ></mat-datepicker>
+                        
+                        </mat-form-field> 
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <input  matInput [formControl]="ToDate"  [matDatepicker]="picker1"  (dateInput)="searchTerm$.next(SearchFreeSummaryReport())" placeholder="To date">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1 ></mat-datepicker>
+                          </mat-form-field> 
+                          </div>
+                        
+                          <div class="col-md-1">
+                            <button mat-flat-button class="btn pull-none" color="secondary" (click)="reset()" >
+                              Reset
+                            </button>
+                          </div>
+                          <div class="col-md-5">
+                           
+                          </div>
+                          <div class="col-md-1" >
+
+                            <button mat-flat-button style="margin-left: 104%" class="btn pull-none"  class="btn-success"  (click)="ExportAsPdf()" >
+                              <mat-icon>save_alt</mat-icon>
+                              Export
+                            </button>
+                        </div>
+                     
+
+
+                    </div>
+                    
+                  </form>
+              <div class="table-responsive" style="    overflow-x: visible;">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <!-- <th colspan="2" style="width: 11.5%;">
+                      Action
+                    </th>
+                    <th (click)="sort('Name')">
+                      Name <i class="{{nameCss}}" aria-hidden="true"></i>
+                    </th> -->
+                    <th (click)="sort('Name')">
+                        Name <i class="{{NameCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('Title')">
+                        Title <i class="{{TitleCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('TechnologyName')">
+                     Technology  <i class="{{technologyNameCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('RoleName')">
+                      Role  <i class="{{RoleCss}}" aria-hidden="true"></i>
+                  </th>
+                    <th (click)="sort('EmailId')">
+                        EmailId  <i class="{{EmailIdCss}}" aria-hidden="true"></i>
+                    </th>
+                    <th (click)="sort('LocationName')">
+                      Location <i class="{{locationNameCSS}}" aria-hidden="true"></i>
+                    </th >
+                   
+                   
+                  
+                   
+                  </thead>
+                  <tbody>
+                    <ng-template [ngIf]="FreeSummaryList != null">
+                    <tr *ngFor="let FreeSummary of FreeSummaryList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                      <!-- <td>
+                        <button
+                          mat-raised-button
+                          (click)="updateMileStone(milestone.id)"
+                          class="btn btn-success  btn-just-icon"
+                          matTooltip="Edit"
+                        >
+                          <i class="material-icons">create</i>
+                          <div class="ripple-container"></div>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          mat-button
+                          class="btn  btn-just-icon"
+                          color="secondary"
+                          mwlConfirmationPopover
+                          [popoverTitle]="popoverTitle"
+                          [popoverMessage]="popoverMessage"
+                          placement="right"
+                          (confirm)="deleteMileStone(milestone.id)"
+                          (cancel)="cancelClicked = true"
+                        >
+                          <i class="material-icons">delete</i>
+                          <div class="ripple-container"></div>
+                        </button>
+                      </td> -->
+                      <td>
+                        {{ FreeSummary.name }}
+                      </td>
+                      <td>
+                        {{ FreeSummary.title }}
+                      </td>
+                      <td>
+                        {{ FreeSummary.technologyName }}
+                      </td>
+                      <td>
+                        {{ FreeSummary.roleName }}
+                      </td>
+                      <td>
+                        {{ FreeSummary.emailId }}
+                      </td>
+                      <td>
+                        {{ FreeSummary.locationName }}
+                      </td>
+                     
+                    </tr>
+                    </ng-template>
+                    <ng-template [ngIf]="FreeSummaryList == null">
+                      <tr>
+                        <td colspan="8" style="text-align-last: center;font: message-box;">
+                          {{status}}
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                 
+                </table>
+               
+                <!-- <div ng-app="refresh_div" ng-controller="refresh_control"> -->
+                <div  class="row">
+                 
+                <div class="col-md-7"style="
+                margin-left: 32%;
+                width: -37%;
+            ">           
+                  <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                </div>
+
+                <div class="col-md-1">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Page size</mat-label>
+                    <mat-select  [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="25">25</mat-option>
+                      <mat-option value="100">100</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

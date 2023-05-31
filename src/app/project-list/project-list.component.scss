@@ -1,0 +1,18 @@
+th[colspan="2"]
+{
+    text-align: center;
+}
+th{
+    cursor: pointer;
+}
+
+.table {
+    width: -webkit-fill-available;
+    margin-bottom: 1rem;
+    color: #212529;
+    overflow-x: scroll;
+}
+
+body {
+    overflow: hidden; /* Hide scrollbars */
+  }

@@ -1,0 +1,224 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-client">
+              <h4 class="card-title">{{clientHeader}}</h4>
+              <!-- <p class="card-category">Complete your profile</p> -->
+            </div>
+            <div class="card-body">
+              <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-md-12">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        type="text"
+                        formControlName="Name"
+                        matInput                       
+                        placeholder="Name"
+                        (keypress)="alphabate($event)"
+                        [ngClass]="{ 'is-invalid': submitted && f.Name.errors }"
+                      />
+                      <mat-error
+                        *ngIf="
+                          submitted && f.Name.errors && f.Name.errors.required
+                        "
+                        >Name is required</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                </div>
+                  <div class="row">
+                  <div class="col-md-12">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        formControlName="CompanyName"
+                        matInput
+                        placeholder="Company Name"
+                        type="text"
+                        [ngClass]="{ 'is-invalid': submitted && f.CompanyName.errors }"
+                      />
+                      <mat-error
+                        *ngIf="
+                          submitted && f.CompanyName.errors && f.CompanyName.errors.required
+                        "
+                        >Company Name is required</mat-error
+                      >
+                    </mat-form-field>
+                  </div>                         
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <mat-form-field class="example-full-width">
+                          <input
+                            formControlName="EmailId"
+                            matInput
+                            placeholder="Email ID*"
+                            type="email"
+                            [ngClass]="{ 'is-invalid': submitted && f.EmailId.errors }"
+                          />
+                          <mat-error *ngIf=" submitted && f.EmailId.touched && f.EmailId.invalid">
+                            <mat-error *ngIf="primaryEmail.errors?.pattern">
+                                Email not Valid
+                            </mat-error>
+                            <mat-error
+                            *ngIf="
+                              submitted && f.EmailId.errors && f.EmailId.errors.required
+                            "
+                            >Email is required</mat-error
+                          >
+                          </mat-error>
+                        </mat-form-field>
+                      </div> 
+                    </div>     
+                    <div class="row">    
+                    <div class="col-md-12">
+                        <mat-form-field class="example-full-width">
+                          
+                          <input
+                            formControlName="AlternateEmailId"
+                            matInput
+                            placeholder="Alternate Email ID"   
+                            [ngClass]="{ 'is-invalid': submitted && f.AlternateEmailId.errors }"                      
+                          />
+                          <mat-error *ngIf=" submitted && f.AlternateEmailId.touched && f.AlternateEmailId.invalid">
+                            <mat-error *ngIf="primaryEmail.errors?.pattern">
+                                Email not Valid
+                            </mat-error>
+                            <mat-error
+                            *ngIf="
+                              submitted && f.AlternateEmailId.errors && f.AlternateEmailId.errors.required
+                            "
+                            >Email is required</mat-error
+                          >
+                          </mat-error>
+                         
+                         
+                          <!-- [ngClass]="{ 'is-invalid': submitted && f.AlternateEmailId.errors }" -->
+                          <!-- <mat-error
+                            *ngIf="
+                              submitted && f.AlternateEmailId.errors && f.AlternateEmailId.errors.required
+                            "
+                            >Alternate EmailId is required</mat-error
+                          > -->
+                        </mat-form-field>
+                      </div> 
+                           
+                  </div>
+                  <div class="row">
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        formControlName="ContactNo1"
+                        matInput
+                        placeholder="Contact No 1"
+                        type="text"
+                                          
+                      
+                      />                      
+                      <!-- <mat-error *ngIf=" submitted && f.ContactNo1.touched && f.ContactNo1.invalid">
+                        <mat-error *ngIf=" submitted && f.ContactNo1.errors && f.ContactNo1.errors.required">Mobile Number is required.</mat-error>
+                        <mat-error *ngIf="f.ContactNo1.errors.pattern">Please, Enter 10 digit Mobile Number.</mat-error>
+                    </mat-error> -->
+                    </mat-form-field>
+                  
+                  </div>
+                
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input
+                        formControlName="ContactNo2"
+                        matInput
+                        placeholder="Contact No 2"
+                        type="text"
+                        (keypress)="mobileNo($event)"
+                        
+                       mask="(+000) 000-000000" 
+                        
+                      />
+                      <!-- [ngClass]="{
+                        'is-invalid': submitted && f.ContactNo2.errors
+                      }"
+                      <mat-error
+                        *ngIf="
+                          submitted &&
+                          f.ContactNo2.errors &&
+                          f.ContactNo2.errors.required
+                        "
+                        >Contact No 2 is required</mat-error
+                      > -->
+                    </mat-form-field>
+                  </div>                     
+                </div>               
+                <div class="row">                    
+                    <div class="col-md-12">
+                        <mat-form-field class="example-full-width">
+                          <textarea
+                            formControlName="Address"
+                            matInput
+                            placeholder="Address"        
+                            [ngClass]="{
+                              'is-invalid': submitted && f.Address.errors
+                            }"          
+                            
+                          >
+                          </textarea>
+                          <mat-error
+                            *ngIf="
+                              submitted &&
+                              f.Address.errors &&
+                              f.Address.errors.required
+                            "
+                            >Address is required</mat-error
+                          >
+                        </mat-form-field>
+                      </div>    
+                         
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="picker"  [formControl]="StartDate" 
+                            [ngClass]="{
+                                'is-invalid': submitted && f.StartDate.errors
+                              }">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>                            
+                          <mat-error
+                            *ngIf="
+                              submitted &&
+                              f.StartDate.errors &&
+                              f.StartDate.errors.required
+                            "
+                            >Start Date is required</mat-error
+                          >
+                        </mat-form-field>
+                      </div>                         
+                  </div>
+  
+                <button
+                  mat-raised-button
+                  type="submit"
+                  class="btn btn-success pull-lef"
+                >
+                  Save
+                </button>
+                <button
+                  mat-button
+                  mat-dialog-close
+                  class="btn pull-lef"
+                  color="secondary" 
+                >
+                  Cancel
+                </button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

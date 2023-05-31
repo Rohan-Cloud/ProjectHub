@@ -1,0 +1,372 @@
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <button
+                mat-raised-button
+                class="pull-right btn btn-success"
+                (click)="onCreate()"
+                >
+                <mat-icon>add</mat-icon>
+                Add Invoice
+                </button>
+            </div>
+            <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-invoice">
+                <h4 class="card-title ">Invoices</h4>            
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="InvoiceFormGroup" autocomplete="off">
+                       <div class="row">
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width">
+                            <input
+                                (keyup)="searchTerm$.next(SearchInvoice())"
+                                type="text"
+                                autocomplete="off"
+                                formControlName="Keyword"
+                                matInput
+                                placeholder="Keyword ......"
+                            />
+                            
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            
+                            <mat-form-field>
+                                <mat-select [formControl]="ClientNameCtrl" placeholder="Clients" (selectionChange)=" searchTerm$.next(GetClientProject())" #singleSelect>
+                                <mat-select-search [formControl]="ClientNameFilterCtrl"></mat-select-search>
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let Client of filteredClients | async" [value]="Client.id">
+                                    {{Client.name}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field>
+                                <mat-select [formControl]="ProjectNameCtrl" placeholder="Projects"  (selectionChange)=" searchTerm$.next(SearchInvoice())" #singleSelect>
+                                <mat-select-search [formControl]="ProjectNameFilterCtrl"></mat-select-search>
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let Project of filteredProjects | async" [value]="Project.id">
+                                    {{Project.name}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Payment Status  </mat-label>
+                                <mat-select
+                                formControlName="PaymentStatusValue"
+                                (selectionChange)=" searchTerm$.next(SearchInvoice())"
+                                >
+                                <mat-option
+                                    *ngFor="let sName of PaymentStatus"
+                                    [value]="sName.value"
+                                >
+                                    {{ sName.name }}
+                                </mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2" >
+                           
+                            <mat-form-field>
+                            <input  matInput [formControl]="StartDate"  [matDatepicker]="picker" (dateInput)="searchTerm$.next(SearchInvoice())" placeholder="From  date" >
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker ></mat-datepicker>
+                            
+                            </mat-form-field> 
+                        </div>
+                        <div class="col-md-2">
+                            <mat-form-field>
+                                <input  matInput [formControl]="Todate"  [matDatepicker]="picker1"  (dateInput)="searchTerm$.next(SearchInvoice())" placeholder="To date">
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1 ></mat-datepicker>
+                            </mat-form-field> 
+                           
+                        </div>
+                        <!-- <div class="col-md-2">
+                        <mat-form-field>
+                            <mat-select [disabled]="butDisabled" [formControl]="MilestoneMultiCtrl" placeholder="MiileStone"  [multiple]="true">
+                            <mat-select-search [formControl]="MileStoneMultiFilterCtrl"></mat-select-search>
+                            <mat-option *ngFor="let ms of filteredMilesStoneMulti | async" [value]="ms.id">
+                                {{ms.name}}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div> -->
+                        
+                        <div class="col-md-1" style="margin-left: 92%;">
+                            <button mat-flat-button class="btn pull-none" color="secondary" (click)="Reset()" >
+                            Reset
+                            </button>
+                        </div>
+                    
+                    </div> 
+                    </form>
+                       
+                <div class="table-responsive" style="overflow-x: visible;">
+                    <table class="table" >
+                    <thead class=" text-primary">
+                        <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                        <th style="text-align: center;" colspan="3">
+                            Action
+                          </th>
+                        </ng-template>
+                        <th (click)="Sort('InvoiceTitle')">
+                            Title <i class="{{invoiceTitleCss}}" aria-hidden="true"></i>
+                        </th>
+                        <th (click)="Sort('ClientName')">
+                            Client <i class="{{clientNameCss}}" aria-hidden="true"></i>
+                        </th>
+                        
+                        <th (click)="Sort('ProjectName')">
+                            Project  <i class="{{projectNameCss}}" aria-hidden="true"></i>
+                        </th>
+                       
+                        <th (click)="Sort('CurrencyName')">
+                            Currency <i class="{{currencyNameCss}}" aria-hidden="true"></i>
+                         </th >
+                        <th (click)="Sort('Amount')">
+                            Amount <i class="{{amountCss}}" aria-hidden="true"></i>
+                         </th >
+                         <th (click)="Sort('PaymentMethod')">
+                            Payment Method <i class="{{paymentMethodCss}}" aria-hidden="true"></i>
+                        </th>
+                        <th (click)="Sort('PaymentStatus')">
+                            Payment Status <i class="{{paymentStatusCss}}" aria-hidden="true"></i>
+                        </th>
+                        <th (click)="Sort('ModifiedDate')">
+                            ModifiedDate/By <i class="{{modifiedDateCss}}" aria-hidden="true"></i>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <ng-template [ngIf]="invoiceList != null">
+                        <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                        
+                    <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                        <td style=" text-align: center;">
+                            <button
+                              mat-raised-button
+                              (click)="updateInvoice(invoice.invoiceId)"
+                              class="btn btn-success  btn-just-icon"
+                              matTooltip="Edit"
+                            >
+                              <i class="material-icons">create</i>
+                              <div class="ripple-container"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <button
+                            mat-button
+                            class="btn  btn-just-icon"
+                            color="secondary"
+                            mwlConfirmationPopover
+                            [popoverTitle]="popoverTitle"
+                            [popoverMessage]="popoverMessage"
+                            placement="right"
+                            (confirm)="deleteInvoice(invoice.invoiceId)"
+                            (cancel)="cancelClicked = true"
+                          >
+                            <i class="material-icons">delete</i>
+                            <div class="ripple-container"></div>
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                          mat-button
+                          (click)="DownLoadPdf(invoice.invoiceId)"
+                          class="btn btn-info btn-just-icon"
+                          matTooltip="Download Pdf"
+                        >
+                          <i class="material-icons">picture_as_pdf</i>
+                          <div class="ripple-container"></div>
+                        </button>
+                          </td>
+                       </ng-template>  
+                        <td>
+                            {{ invoice.invoiceTitle }}
+                        </td>
+                        <td>
+                            {{ invoice.clientName }}
+                        </td>
+                        <td>
+                            {{ invoice.projectName }}
+                        </td>
+                      
+                        <td>
+                            {{ invoice.currencyName }}
+                        </td>
+                        
+                        <td>
+                            {{ invoice.amount }}
+                        </td>
+                        <td>
+                            {{ invoice.paymentMethod }}
+                        </td>
+                        <td>
+                            {{ invoice.paymentStatus }}
+                        </td>
+                       
+                        <td>
+                            {{ invoice.modifiedDate | date: "MM-dd-yyyy" }}<br>
+                            {{ invoice.modifiedBYName }}
+                        </td>
+                          
+                    </tr>
+                        </ng-template>
+                        <ng-template [ngIf]="invoiceList == null">
+                            <tr>
+                            <td colspan="10" style="text-align-last: center;font: message-box;">
+                                {{status}}
+                            </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                   
+                    </table>
+                   
+                    <!-- <div ng-app="refresh_div" ng-controller="refresh_control"> -->
+                    <div  class="row">
+                    
+                    <div class="col-md-7"style="
+                    margin-left: 32%;
+                    width: -37%;
+                ">           
+                    <pagination-controls   autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                    </div>
+
+                    <div class="col-md-1">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Page size</mat-label>
+                        <mat-select [(value)]="selected" [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDropDown()">
+                        <mat-option value="5">5</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="25">25</mat-option>
+                        <mat-option value="100">100</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    </div>
+                </div>
+                </div>
+                
+                </div>
+            </div>
+            </div>
+      </div>
+   </div>
+</div>
+<!-- <div id="print" #content >
+
+<!------ Include the above in your HEAD tag ---------->
+
+<!-- <div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+    		<div class="invoice-title">
+    			<h2>Invoice</h2><h3 class="pull-right">Order # 12345</h3>
+    		</div>
+    		<hr>
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<address>
+    				<strong>Billed To:</strong><br>
+    					John Smith<br>
+    					1234 Main<br>
+    					Apt. 4B<br>
+    					Springfield, ST 54321
+    				</address>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<address>
+        			<strong>Shipped To:</strong><br>
+    					Jane Smith<br>
+    					1234 Main<br>
+    					Apt. 4B<br>
+    					Springfield, ST 54321
+    				</address>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<address>
+    					<strong>Payment Method:</strong><br>
+    					Visa ending **** 4242<br>
+    					jsmith@email.com
+    				</address>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<address>
+    					<strong>Order Date:</strong><br>
+    					March 7, 2014<br><br>
+    				</address>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-12">
+    		<div class="panel panel-default">
+    			<div class="panel-heading">
+    				<h3 class="panel-title"><strong>Order summary</strong></h3>
+    			</div>
+    			<div class="panel-body">
+    				<div class="table-responsive">
+    					<table class="table table-condensed">
+    						<thead>
+                                <tr>
+        							<td><strong>Item</strong></td>
+                                    <td class="text-center"></td>
+        							<td class="text-center"><strong>Hour</strong></td>
+        							<td class="text-right"><strong>Amount</strong></td>
+                                </tr>
+    						</thead>
+    						<tbody>
+                                <tr *ngFor="let report of reportList">
+                      
+                                    <td>
+                                     {{ report.name }} 
+                                    
+                                    </td>
+                                    <td class="text-center">
+                                       
+                                       
+                                       </td>
+                                    <td class="text-center"> {{ report.hour }}</td>
+                                     
+                                  
+                                    <td class="text-right">{{ report.currencyName }} {{ report.amount }}</td>
+                                  </tr>
+    							<tr>
+    								<td class="thick-line"></td>
+    								<td class="thick-line"></td>
+    								<td class="thick-line text-center"><strong>Subtotal</strong></td>
+    								<td class="thick-line text-right">$670.99</td>
+    							</tr>
+    							<tr>
+    								<td class="no-line"></td>
+    								<td class="no-line"></td>
+    								<td class="no-line text-center"><strong>Shipping</strong></td>
+    								<td class="no-line text-right">$15</td>
+    							</tr>
+    							<tr>
+    								<td class="no-line"></td>
+    								<td class="no-line"></td>
+    								<td class="no-line text-center"><strong>Total</strong></td>
+    								<td class="no-line text-right">$685.99</td>
+    							</tr>
+    						</tbody>
+    					</table>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>
+  </div>  -->
+  

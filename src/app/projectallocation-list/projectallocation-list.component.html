@@ -1,0 +1,210 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <button
+          mat-raised-button
+          class="pull-right btn-success"
+          (click)="onCreate()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Project Allocation
+        </button>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-projectallocation">
+            <h4 class="card-title ">Project Allocations</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col-md-5">
+                  <mat-form-field class="example-full-width">
+                    <input
+                      (keyup)="searchTerm$.next(searchProjectAllocation())"
+                      type="text"
+                      autocomplete="off"
+                      [formControl]="keyword"
+                      matInput
+                      placeholder=" Search Keywords "
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="projectNameCtrl"
+                      (selectionChange)="
+                        searchTerm$.next(searchProjectAllocation())
+                      "
+                      placeholder="Project Name"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="projectNameFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option
+                        *ngFor="let pname of filteredProjectNames | async"
+                        [value]="pname.id"
+                      >
+                        {{ pname.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                  <mat-form-field class="example-full-width">
+                    <mat-select
+                      [formControl]="employeeNameCtrl"
+                      (selectionChange)="
+                        searchTerm$.next(searchProjectAllocation())
+                      "
+                      placeholder="Employee Name"
+                      #singleSelect
+                    >
+                      <mat-select-search
+                        [formControl]="employeeNameFilterCtrl"
+                      ></mat-select-search>
+                      <mat-option
+                        *ngFor="let ename of filteredEmployeeNames | async"
+                        [value]="ename.id"
+                      >
+                        {{ ename.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2">                        
+                  <mat-form-field>
+                      <mat-select [formControl]="statusCtrl" placeholder="Status" (selectionChange)=" searchTerm$.next(searchProjectAllocation())" #singleSelect>
+                        <mat-select-search [formControl]="statusFilterCtrl"></mat-select-search>
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let status of filteredStatus | async" [value]="status.id">
+                          {{status.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>    
+                <div class="col-md-1">
+                  <button mat-flat-button class="btn pull-none" color="secondary" (click)="reset()" >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>         
+          
+            <div class="table-responsive" style="overflow-x: visible;">
+              <table class="table">
+                <thead class=" text-primary">
+                  <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                  <th colspan="2" class="icon-set">
+                    Action
+                  </th>
+                </ng-template>
+                  <th (click)="sort('ProjectName')">
+                    Project Name <i class="{{projectNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('EmployeeName')">
+                    Employee Name 
+                    <i class="{{employeeNameCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('StartDate')">
+                    Start Date 
+                    <i class="{{startDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('EndDate')">
+                    End Date
+                    <i class="{{endDateCSS}}" aria-hidden="true"></i>
+                  </th>
+                  <th (click)="sort('UpdatedDate')">
+                    Updated Date 
+                    <i class="{{updatedDateCSS}}" aria-hidden="true"></i>
+                  </th> 
+                </thead>
+                <tbody>
+                  <ng-template [ngIf]="projectAllocationList != null">
+                  <tr *ngFor="let projectallocation of projectAllocationList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+                    <ng-template [ngIf]="RoleName == 'Admin'  ||  RoleName === 'HR' ||  RoleName === 'Super Admin' ">
+                    <th>
+                      <button
+                        mat-raised-button 
+                        (click)="updateProjectAllocation(projectallocation.id)"
+                        class="btn btn-success  btn-just-icon"
+                        matTooltip="Edit"
+                      >
+                        <i class="material-icons">create</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </th>
+                    <td>
+                      <button
+                        mat-button
+                        class="btn btn-just-icon"
+                        color="secondary"
+                        mwlConfirmationPopover
+                        [popoverTitle]="popoverTitle"
+                        [popoverMessage]="popoverMessage"
+                        placement="right"
+                        (confirm)="
+                          deleteProjectAllocation(projectallocation.id)
+                        "
+                        (cancel)="cancelClicked = true"
+                      >
+                        <i class="material-icons">delete</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </td>
+                  </ng-template>
+                    <td>
+                      {{ projectallocation.projectName }}
+                    </td>
+                    <td>
+                      {{ projectallocation.employeeName }}
+                    </td>
+                    <td>
+                      {{ projectallocation.startDate | date: "MM-dd-yyyy " }}
+                    </td>
+                    <td>
+                      {{ projectallocation.endDate | date: "MM-dd-yyyy" }}
+                    </td>
+                    <td>
+                      {{ projectallocation.updatedDate | date: "MM-dd-yyyy" }}
+                    </td>
+                  </tr>
+                  </ng-template>
+                  <ng-template [ngIf]="projectAllocationList == null">
+                    <tr>
+                      <td colspan="7" style="text-align-last: center;font: message-box;">
+                        {{status}}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+              <div  class="row">                 
+                <div class="col-md-7"style="
+                margin-left: 32%;
+                width: -37%;">           
+                  <pagination-controls autoHide="true" (pageChange)="p = $event" ></pagination-controls>
+                </div>
+
+                <div class="col-md-1">
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Page size</mat-label>
+                    <mat-select [(value)]="selected" [formControl]="pageSizeCtrl" placeholder="Page size" (selectionChange)=" pageSizeDD()">
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="10">10</mat-option>
+                      <mat-option value="25">25</mat-option>
+                      <mat-option value="100">100</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

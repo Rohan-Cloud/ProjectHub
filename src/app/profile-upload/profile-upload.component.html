@@ -1,0 +1,56 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-client">
+              <h4 class="card-title">Profile Photo</h4>
+              <!-- <p class="card-category">Complete your profile</p> -->
+            </div>
+            <div class="card-body">
+              <form  (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-6">
+                    <input type="file" (change)="fileChangeEvent($event)" />
+                      
+                    <image-cropper
+                        [imageChangedEvent]="imageChangedEvent"
+                        [maintainAspectRatio]="true"
+                        [aspectRatio]="1/1"
+                        roundCropper="true"
+                        format="jpg"
+                        class="img-container"
+                        (imageCropped)="imageCropped($event)"
+                        (imageLoaded)="imageLoaded()"
+                        (cropperReady)="cropperReady()"
+                        (loadImageFailed)="loadImageFailed()"
+                    ></image-cropper>
+                    </div>
+                    <div class="col-md-6">
+                    <img [src]="imageToShow"  onerror="this.onerror=null;this.src='/assets/img/admin.png'" />
+                    </div>
+                </div>
+                <button
+                  mat-raised-button
+                  type="submit"
+                  class="btn btn-success pull-lef"
+                >
+                  Save
+                </button>
+                <button
+                mat-button
+                mat-dialog-close
+                class="btn pull-lef"
+                color="secondary"
+              >
+                Cancel
+              </button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
